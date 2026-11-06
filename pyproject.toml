@@ -1,0 +1,95 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mcp-agent"
+version = "1.0.0"
+description = "MCP Multi-Tool Agent - A comprehensive Model Context Protocol implementation with weather, filesystem, time and file tools"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    {name = "MCP Agent Developer"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+keywords = ["mcp", "ai", "llm", "tools", "weather", "filesystem", "assistant"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+dependencies = [
+    # MCP核心库
+    "mcp>=1.0.0",
+    
+    # HTTP请求库（用于LLM API调用）
+    "requests>=2.31.0",
+    
+    # 异步IO支持
+    "pydantic>=2.5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    # 开发和测试依赖
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-username/mcp-agent"
+Repository = "https://github.com/your-username/mcp-agent"
+Issues = "https://github.com/your-username/mcp-agent/issues"
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+    ".",
+]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+asyncio_mode = "auto"
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503"]
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".venv",
+    ".eggs",
+]

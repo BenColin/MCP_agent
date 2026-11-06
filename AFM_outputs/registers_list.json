@@ -1,0 +1,578 @@
+{
+  "registers": [
+    {
+      "code": "REG01",
+      "address": "00000001",
+      "type": "switch",
+      "default": 0,
+      "name": "复位所有寄存器"
+    },
+    {
+      "code": "REG02",
+      "address": "00000002",
+      "type": "parameter",
+      "default": 0,
+      "name": "纳米台X方向位置"
+    },
+    {
+      "code": "REG03",
+      "address": "00000003",
+      "type": "parameter",
+      "default": 0,
+      "name": "纳米台Y方向位置"
+    },
+    {
+      "code": "REG04",
+      "address": "00000004",
+      "type": "switch",
+      "default": 0,
+      "name": "AO1_L电压范围选择,X"
+    },
+    {
+      "code": "REG05",
+      "address": "00000005",
+      "type": "switch",
+      "default": 0,
+      "name": "AO2_L电压范围选择,Y"
+    },
+    {
+      "code": "REG06",
+      "address": "00000006",
+      "type": "switch",
+      "default": 0,
+      "name": "AO3_L电压范围选择,Z"
+    },
+    {
+      "code": "REG07",
+      "address": "00000007",
+      "type": "switch",
+      "default": 0,
+      "name": "AO4_L电压范围选择"
+    },
+    {
+      "code": "REG08",
+      "address": "00000008",
+      "type": "parameter",
+      "default": 0,
+      "name": "正弦波振幅"
+    },
+    {
+      "code": "REG09",
+      "address": "00000009",
+      "type": "parameter",
+      "default": 9.9999,
+      "name": "探针轻敲模式下的停止阈值"
+    },
+    {
+      "code": "REG0A",
+      "address": "0000000A",
+      "type": "parameter",
+      "default": 9.9999,
+      "name": "探针接触模式下的停止阈值"
+    },
+    {
+      "code": "REG0B",
+      "address": "0000000B",
+      "type": "switch",
+      "default": 0,
+      "name": "探针模式选择"
+    },
+    {
+      "code": "REG0C",
+      "address": "0000000C",
+      "type": "parameter",
+      "default": 0,
+      "name": "Z电压V1"
+    },
+    {
+      "code": "REG0D",
+      "address": "0000000D",
+      "type": "parameter",
+      "default": 0,
+      "name": "正弦波频率设置"
+    },
+    {
+      "code": "REG0E",
+      "address": "0000000E",
+      "type": "parameter",
+      "default": 1000000,
+      "name": "状态包间隔设置"
+    },
+    {
+      "code": "REG0F",
+      "address": "0000000F",
+      "type": "parameter",
+      "default": 0,
+      "name": "探针STM模式下的停止阈值"
+    },
+    {
+      "code": "REG11",
+      "address": "00010001",
+      "type": "switch",
+      "default": 0,
+      "name": "开始位移台单独控制"
+    },
+    {
+      "code": "REG12",
+      "address": "00010002",
+      "type": "parameter",
+      "default": 0,
+      "name": "位移台单独控制模式-Z方向控制电压"
+    },
+    {
+      "code": "REG14",
+      "address": "00010004",
+      "type": "parameter",
+      "default": 0,
+      "name": "通道1发生时相位偏置"
+    },
+    {
+      "code": "REG15",
+      "address": "00010005",
+      "type": "parameter",
+      "default": 0,
+      "name": "通道1解调时相位偏置"
+    },
+    {
+      "code": "REG16",
+      "address": "00010006",
+      "type": "parameter",
+      "default": 0,
+      "name": "通道2发生时相位偏置"
+    },
+    {
+      "code": "REG17",
+      "address": "00010007",
+      "type": "parameter",
+      "default": 0,
+      "name": "通道2解调时相位偏置"
+    },
+    {
+      "code": "REG19",
+      "address": "00010009",
+      "type": "parameter",
+      "default": 0,
+      "name": "通道1滤波器增益系数选择"
+    },
+    {
+      "code": "REG1A",
+      "address": "0001000A",
+      "type": "parameter",
+      "default": 0,
+      "name": "通道2滤波器增益系数选择"
+    },
+    {
+      "code": "REG1B",
+      "address": "0001000B",
+      "type": "parameter",
+      "default": 0,
+      "name": "通道1累积计数"
+    },
+    {
+      "code": "REG1C",
+      "address": "0001000C",
+      "type": "parameter",
+      "default": 0,
+      "name": "通道2累积计数"
+    },
+    {
+      "code": "REG21",
+      "address": "00020001",
+      "type": "switch",
+      "default": 0,
+      "name": "传输原始数据模式"
+    },
+    {
+      "code": "REG22",
+      "address": "00020002",
+      "type": "parameter",
+      "default": -10,
+      "name": "Z电压最小值"
+    },
+    {
+      "code": "REG23",
+      "address": "00020003",
+      "type": "parameter",
+      "default": 10,
+      "name": "Z电压最大值"
+    },
+    {
+      "code": "REG24",
+      "address": "00020004",
+      "type": "switch",
+      "default": 0,
+      "name": "传输原始数据模式-通道选择"
+    },
+    {
+      "code": "REG26",
+      "address": "00020006",
+      "type": "parameter",
+      "default": 1,
+      "name": "原始数据传输速度"
+    },
+    {
+      "code": "REG31",
+      "address": "00030001",
+      "type": "switch",
+      "default": 0,
+      "name": "开始轻敲扫频"
+    },
+    {
+      "code": "REG32",
+      "address": "00030002",
+      "type": "parameter",
+      "default": 0,
+      "name": "轻敲扫频模式-起始频率"
+    },
+    {
+      "code": "REG33",
+      "address": "00030003",
+      "type": "parameter",
+      "default": 10,
+      "name": "轻敲扫频模式-步进频率"
+    },
+    {
+      "code": "REG34",
+      "address": "00030004",
+      "type": "parameter",
+      "default": 100,
+      "name": "轻敲扫频模式-频率步数"
+    },
+    {
+      "code": "REG35",
+      "address": "00030005",
+      "type": "parameter",
+      "default": 20,
+      "name": "轻敲扫频模式-单频点固定时间"
+    },
+    {
+      "code": "REG41",
+      "address": "00040001",
+      "type": "switch",
+      "default": 0,
+      "name": "开始力曲线测试"
+    },
+    {
+      "code": "REG42",
+      "address": "00040002",
+      "type": "parameter",
+      "default": 0,
+      "name": "力曲线测试-z电压最小值"
+    },
+    {
+      "code": "REG43",
+      "address": "00040003",
+      "type": "parameter",
+      "default": 0.01,
+      "name": "力曲线测试-z电压步进值"
+    },
+    {
+      "code": "REG44",
+      "address": "00040004",
+      "type": "parameter",
+      "default": 900,
+      "name": "力曲线测试-最大步数"
+    },
+    {
+      "code": "REG45",
+      "address": "00040005",
+      "type": "parameter",
+      "default": 100,
+      "name": "力曲线测试-单点等待时间"
+    },
+    {
+      "code": "REG51",
+      "address": "00050001",
+      "type": "switch",
+      "default": 0,
+      "name": "开始定点PID"
+    },
+    {
+      "code": "REG52",
+      "address": "00050002",
+      "type": "parameter",
+      "default": -0.005,
+      "name": "PID参数-比例常数P"
+    },
+    {
+      "code": "REG53",
+      "address": "00050003",
+      "type": "parameter",
+      "default": -0.003,
+      "name": "PID参数-积分常数I"
+    },
+    {
+      "code": "REG54",
+      "address": "00050004",
+      "type": "parameter",
+      "default": 0,
+      "name": "PID参数-微分常数D"
+    },
+    {
+      "code": "REG55",
+      "address": "00050005",
+      "type": "parameter",
+      "default": 0.05,
+      "name": "PID参数-限制Limit"
+    },
+    {
+      "code": "REG56",
+      "address": "00050006",
+      "type": "parameter",
+      "default": 0,
+      "name": "PID参数-反馈目标值Setpoint"
+    },
+    {
+      "code": "REG57",
+      "address": "00050007",
+      "type": "parameter",
+      "default": 300,
+      "name": "PID参数-PID反馈时间"
+    },
+    {
+      "code": "REG58",
+      "address": "00050008",
+      "type": "parameter",
+      "default": 5000,
+      "name": "单次升降时间间隔"
+    },
+    {
+      "code": "REG59",
+      "address": "00050009",
+      "type": "switch",
+      "default": 0,
+      "name": "STM是否取对数"
+    },
+    {
+      "code": "REG61",
+      "address": "00060001",
+      "type": "switch",
+      "default": 0,
+      "name": "扫描模式-使能"
+    },
+    {
+      "code": "REG62",
+      "address": "00060002",
+      "type": "parameter",
+      "default": 300,
+      "name": "扫描模式-扫描前进针等待时间"
+    },
+    {
+      "code": "REG63",
+      "address": "00060003",
+      "type": "parameter",
+      "default": 2,
+      "name": "扫描模式-X方向扫描电压范围"
+    },
+    {
+      "code": "REG64",
+      "address": "00060004",
+      "type": "parameter",
+      "default": 2,
+      "name": "扫描模式-Y方向扫描电压范围"
+    },
+    {
+      "code": "REG65",
+      "address": "00060005",
+      "type": "parameter",
+      "default": 512,
+      "name": "扫描模式-X方向移动次数"
+    },
+    {
+      "code": "REG66",
+      "address": "00060006",
+      "type": "parameter",
+      "default": 512,
+      "name": "扫描模式-Y方向移动次数"
+    },
+    {
+      "code": "REG67",
+      "address": "00060007",
+      "type": "parameter",
+      "default": 4,
+      "name": "每点PID次数"
+    },
+    {
+      "code": "REG68",
+      "address": "00060008",
+      "type": "parameter",
+      "default": 0.035,
+      "name": "二次扫描抬起高度"
+    },
+    {
+      "code": "REG69",
+      "address": "00060009",
+      "type": "parameter",
+      "default": 500,
+      "name": "二次扫描抬起单点时间"
+    },
+    {
+      "code": "REG6A",
+      "address": "0006000A",
+      "type": "parameter",
+      "default": 0,
+      "name": "DC偏压大小"
+    },
+    {
+      "code": "REG6B",
+      "address": "0006000B",
+      "type": "parameter",
+      "default": 15,
+      "name": "二次扫描抬起单点次数"
+    },
+    {
+      "code": "REG6C",
+      "address": "0006000C",
+      "type": "parameter",
+      "default": 800,
+      "name": "二次扫描抬起升降速度"
+    },
+    {
+      "code": "REG6D",
+      "address": "0006000D",
+      "type": "parameter",
+      "default": 100,
+      "name": "二次抬起扫描完成后，落下后等待时间"
+    },
+    {
+      "code": "REG6E",
+      "address": "0006000E",
+      "type": "parameter",
+      "default": 100,
+      "name": "二次抬起扫描完成前，抬起后等待时间"
+    },
+    {
+      "code": "REG6F",
+      "address": "0006000F",
+      "type": "switch",
+      "default": 0,
+      "name": "扫描顺逆时针切换"
+    },
+    {
+      "code": "REG71",
+      "address": "00070001",
+      "type": "switch",
+      "default": 0,
+      "name": "自动进针-使能"
+    },
+    {
+      "code": "REG72",
+      "address": "00070002",
+      "type": "parameter",
+      "default": 0,
+      "name": "自动进针-V2"
+    },
+    {
+      "code": "REG73",
+      "address": "00070003",
+      "type": "parameter",
+      "default": 2,
+      "name": "自动进针-V3"
+    },
+    {
+      "code": "REG74",
+      "address": "00070004",
+      "type": "parameter",
+      "default": 500,
+      "name": "信号稳定时间"
+    },
+    {
+      "code": "REG81",
+      "address": "00080001",
+      "type": "parameter",
+      "default": 0,
+      "name": "蝴蝶曲线DC偏压起始值"
+    },
+    {
+      "code": "REG82",
+      "address": "00080001",
+      "type": "parameter",
+      "default": 0,
+      "name": "蝴蝶曲线DC偏压步长"
+    },
+    {
+      "code": "REG83",
+      "address": "00080003",
+      "type": "parameter",
+      "default": 5,
+      "name": "蝴蝶曲线单点次数"
+    },
+    {
+      "code": "REG84",
+      "address": "00080004",
+      "type": "parameter",
+      "default": 20,
+      "name": "蝴蝶曲线步数"
+    },
+    {
+      "code": "REG85",
+      "address": "00080005",
+      "type": "switch",
+      "default": 0,
+      "name": "开始蝴蝶曲线"
+    },
+    {
+      "code": "REG86",
+      "address": "00080005",
+      "type": "switch",
+      "default": 0,
+      "name": "开始PFM扫频"
+    },
+    {
+      "code": "REG87",
+      "address": "00080007",
+      "type": "parameter",
+      "default": 0.05,
+      "name": "AC-PID参数-比例常数P"
+    },
+    {
+      "code": "REG88",
+      "address": "00080008",
+      "type": "parameter",
+      "default": 0.03,
+      "name": "AC-PID参数-积分常数I"
+    },
+    {
+      "code": "REG89",
+      "address": "00080009",
+      "type": "parameter",
+      "default": 0,
+      "name": "AC-PID参数-微分常数D"
+    },
+    {
+      "code": "REG8A",
+      "address": "0008000A",
+      "type": "parameter",
+      "default": 0.03,
+      "name": "AC-PID参数-限制Limit"
+    },
+    {
+      "code": "REG8B",
+      "address": "0008000B",
+      "type": "parameter",
+      "default": -10,
+      "name": "DC最小值"
+    },
+    {
+      "code": "REG8C",
+      "address": "0008000C",
+      "type": "parameter",
+      "default": 10,
+      "name": "DC最大值"
+    },
+    {
+      "code": "REG8E",
+      "address": "0008000E",
+      "type": "parameter",
+      "default": 0,
+      "name": "AC频率&抬起后"
+    },
+    {
+      "code": "REG8F",
+      "address": "0008000F",
+      "type": "parameter",
+      "default": 0,
+      "name": "AC振幅&抬起后"
+    }
+  ]
+}

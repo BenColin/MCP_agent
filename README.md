@@ -12,46 +12,88 @@
 
 ### 🛠️ 工具集成
 - 📁 **文件系统**: 读写、搜索、编辑、移动文件
-- 🌤️ **天气查询**: 支持任意城市和日期
+- 🌤️ **天气查询**。按城市返回内置的模拟天气
 - ⏰ **时间服务**: 多时区、多格式支持
 - 🧪 **AFM工具**: 问题查询、寄存器校验、协议检索、语义搜索
 
 
 
-## 🚀 快速开始
+## 🚀 配置与运行
 
-### 1. 安装依赖
-```bash
-pip install -e .
+在所选版本的仓库根目录执行下文的 PowerShell 命令。
+
+| 快照 | MCP 服务脚本 | AFM 数据目录 |
+| --- | --- | --- |
+| V0.1（`1222c2d`） | `mcp_tools_server.py` | `AFM_tool/` |
+| V0.3（`24be745`） | `mcp_server.py` | `Context/` |
+
+### 1. 安装 Python 和依赖
+
+复现两版时统一使用 **Python 3.12**。`tools/outfit_tool.py` 的 f-string 用到了 3.12 的语法。安装时启用 Windows 的 `py` 启动器，再用 `py -3.12 --version` 确认解释器版本。 [Python 3.12 语法说明](https://docs.python.org/3.12/whatsnew/3.12.html#pep-701-syntactic-formalization-of-f-strings)
+
+两版都把运行依赖写在 `pyproject.toml` 的 Hatch 构建表下。请在仓库外创建虚拟环境，显式安装 MCP Python SDK 1.x（工具协议）、`requests`（HTTP 请求）和 `pydantic`（MCP 数据模型）。 [Python 项目依赖规范](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#dependencies-and-requirements)
+
+```powershell
+$agentVenv = Join-Path $env:LOCALAPPDATA 'MCP_agent\venv312'
+py -3.12 -m venv $agentVenv
+$agentPython = Join-Path $agentVenv 'Scripts\python.exe'
+& $agentPython -m pip install "mcp>=1.0.0,<2" "requests>=2.31.0" "pydantic>=2.5.0,<3"
+& $agentPython -m pip check
 ```
 
-### 2. 快速体验（推荐）
-```bash
-# 5分钟了解所有功能
-python quick_start.py
+`hatchling` 用于项目打包。`pytest`、`pytest-asyncio`、`black` 和 `flake8` 是开发可选依赖。
+
+### 2. 驱动和本地文件
+
+- **驱动**。两版直接读取仓库内的 AFM 协议字典、提示词和故障文档，用于查询和数值校验，无需安装 AFM 硬件驱动。
+- **V0.1 启动缺件**。客户端和服务端都导入了 `tools/outfit_tool.py`，该文件从 V0.3 起入库。在单独检出的 V0.1 工作副本中执行 `git restore --source=24be745 --worktree -- tools/outfit_tool.py`，即可从 V0.3 补齐该模块。
+- **V0.3 记忆数据**。常规会话默认使用 `memory/`，快速演示使用 `quick_start_memory/`。程序自动创建目录，运行位置须可写。
+
+### 3. 配置硅基流动 API
+
+主对话、穿衣建议和 AFM 语义检索共用一把硅基流动中国站 API Key。天气工具读取内置模拟数据，`demo_usage.py weather` 仍会通过主对话请求模型。
+
+在控制台创建密钥，在下面的隐藏输入提示中输入裸密钥，供当前 PowerShell 会话使用。第二条命令查询账户可用的模型 ID。 [硅基流动 API 密钥](https://cloud.siliconflow.cn/account/ak) · [模型列表接口](https://docs.siliconflow.cn/docs/api/models-get)
+
+```powershell
+$env:SILICONFLOW_API_KEY = [pscredential]::new('SiliconFlow', (Read-Host 'SiliconFlow API Key' -AsSecureString)).GetNetworkCredential().Password
+(Invoke-RestMethod -Uri 'https://api.siliconflow.cn/v1/models' -Headers @{
+    Authorization = "Bearer $env:SILICONFLOW_API_KEY"
+}).data.id
 ```
 
-### 3. 启动交互式对话
-```bash
-python llm_with_mcp_tools.py
+**主对话和 MCP 子进程（两版）**。在本地工作副本的 `llm_with_mcp_tools.py` 中补齐 `import os`、`import sys`，并从 `mcp.client.stdio` 导入 `get_default_environment`。在构造函数中用 `self.api_key = os.environ.get("SILICONFLOW_API_KEY", "")` 替换占位符赋值，再在 `initialize_mcp()` 中按下方构造参数。V0.1 将脚本名换为 `mcp_tools_server.py`。穿衣工具会从子进程环境读取密钥。 [MCP SDK 的 stdio 环境传递](https://github.com/modelcontextprotocol/python-sdk/blob/v1.0.0/src/mcp/client/stdio.py)
+
+```python
+server_params = StdioServerParameters(
+    command=sys.executable,
+    args=[os.path.join(current_dir, "mcp_server.py")],
+    env={**get_default_environment(), "SILICONFLOW_API_KEY": self.api_key},
+)
 ```
 
-**特殊命令**:
-- `clear` / `清除` - 清除当前会话记忆
-- `status` / `状态` - 查看记忆系统状态
-- `help` / `帮助` - 查看可用功能
-- `quit` / `退出` - 退出程序（自动保存会话）
-### 4. 运行基础工具演示
-```bash
-# 天气工具演示
-python demo_usage.py weather
+两版的主对话及穿衣工具默认使用 `Pro/deepseek-ai/DeepSeek-V3.1-Terminus`。若需换模型，用账户可用且支持工具调用的模型 ID 更新 `llm_with_mcp_tools.py` 的 `self.model` 和 `tools/outfit_tool.py` 的 `DEFAULT_MODEL`。
 
-# 全工具综合演示
-python demo_usage.py all
+**可选联网功能**。请求头统一使用 `Bearer` 格式，环境变量仍保存裸密钥。 [Embedding 接口](https://docs.siliconflow.cn/docs/api/embeddings-post) · [Rerank 接口](https://docs.siliconflow.cn/docs/api/rerank-post)
 
-# 交互式对话模式
-python demo_usage.py interactive
+- **AFM 语义检索**。V0.1 在 `tools/afm_tool.py` 的 `_sf_headers()` 中配置，V0.3 在 `tools/afm_semantic_tool.py` 的 `_rerank()`、`_embedding_scores()` 中配置。将各处的 `"Authorization": api_key` 改为 `"Authorization": f"Bearer {api_key}"`。默认模型分别为 `Qwen/Qwen3-Embedding-8B` 和 `Qwen/Qwen3-Reranker-8B`。
+- **知识库重排（V0.3）**。使用 `search_knowledge(..., use_rerank=True)` 时，将 `context_manager.py` 的 `_rerank_results()` 中的请求头改为 `"Authorization": f"Bearer {os.environ['SILICONFLOW_API_KEY']}"`。
+- **独立 API 示例**。V0.1 用 `siliconCloud.py`，V0.3 用 `Context/请求siliconCloud示例.py`。在文件顶部加 `import os`，将各处 `Authorization` 占位符改为上一条的环境变量写法。
+
+### 4. 启动
+
+完成主对话配置后，从当前会话按需运行。
+
+```powershell
+& $agentPython .\llm_with_mcp_tools.py  # 两版的交互对话
+& $agentPython .\demo_usage.py weather  # 两版也支持 all 和 interactive
+& $agentPython .\demo_usage.py afm      # 仅 V0.1
+& $agentPython .\quick_start.py         # 仅 V0.3
 ```
+
+V0.3 的交互命令包括 `clear`（清除会话）、`status`（记忆状态）、`help`（帮助）、`quit`（退出）。
+
+接入独立 MCP 客户端时，`command` 填虚拟环境中 Python 的绝对路径，`args` 传对应服务脚本的绝对路径。联网工具需要在服务的 `env` 中注入 `SILICONFLOW_API_KEY`。本地 AFM 查询、时间、文件和模拟天气工具可直接调用。
 
 ## 💡 使用示例
 
@@ -74,9 +116,7 @@ python demo_usage.py interactive
 ```
 
 ### 天气工具 (WeatherTool)
-- 支持城市天气查询
-- 支持指定日期查询
-- 返回详细天气信息
+- 按城市返回内置的模拟天气数据
 
 ### 文件系统工具 (FileSystemTool)
 - `read_file`: 读取文件内容
@@ -237,11 +277,6 @@ ShortTermMemory(
 ## 📚 文档
 
 - [上下文工程架构设计文档](CONTEXT_ENGINEERING_DESIGN.md) - 详细的架构说明和技术决策
-
-## 配置说明
-- API配置在 `llm_with_mcp_tools.py` 中
-- 工具配置在各自的工具模块中
-- 项目依赖在 `pyproject.toml` 中管理
 
 ## 📄 许可证
 

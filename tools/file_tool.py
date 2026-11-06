@@ -33,6 +33,31 @@ class FileTool:
                 "required": ["content"]
             }
         )
+
+    @staticmethod
+    def get_llm_tool_definition() -> dict:
+        """以LLM工具规范导出定义，用于 tools 参数"""
+        return {
+            "type": "function",
+            "function": {
+                "name": "save_outfit_plan",
+                "description": "将穿衣建议内容保存为markdown文件到当前目录",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "content": {
+                            "type": "string",
+                            "description": "要保存的穿衣建议内容（markdown格式）"
+                        },
+                        "filename": {
+                            "type": "string",
+                            "description": "保存的markdown文件名，可选，默认为outfit_plan_YYYYMMDD_HHMM.md"
+                        }
+                    },
+                    "required": ["content"]
+                }
+            }
+        }
     
     @staticmethod
     def handle_save_outfit_plan(arguments: Dict[str, Any]) -> list[TextContent]:

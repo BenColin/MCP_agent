@@ -1,51 +1,47 @@
-# MCP 多功能智能助手
+# MCP 智能助手 + 上下文工程
 
-这是一个基于 MCP (Model Context Protocol) 的多功能智能助手项目，集成了天气查询、文件系统操作、时间获取等多种工具，通过LLM实现智能对话和任务执行。
+基于 MCP (Model Context Protocol) 的多功能智能助手，集成天气查询、文件系统操作、时间获取、AFM工具等，**支持多轮连续对话和智能记忆管理**。
 
-## 🌟 功能特性
+## ✨ 核心特性
 
-- 🌤️ **天气查询**: 支持任意城市和日期的天气信息查询
-- 📁 **文件系统操作**: 文件读写、目录管理、文件搜索等完整文件操作
-- ⏰ **时间服务**: 获取当前时间，支持多时区和格式
-- 💾 **文件保存**: 智能内容保存和管理
-- 🤖 **智能对话**: 基于LLM的自然语言交互
-- ⚡ **异步架构**: 高性能异步处理
-- 🛠️ **模块化设计**: 清晰的工具模块结构
-- 🔬 **AFM 控制辅助**: 寄存器查询、标准流程、故障检索（支持嵌入与重排）
+### 🧠 上下文工程（Context Engineering）
+- **多轮连续对话**: 保持对话连贯性，理解上下文关系
+- **智能记忆管理**: 自动识别并保存用户偏好、重要信息
+- **短期/长期记忆**: 分层管理对话历史和用户画像
+- **上下文窗口优化**: 防止token超限，智能压缩历史消息
 
-## 📁 项目结构
-```
-MCP_agent/
-├── README.md                   # 项目说明文档
-├── demo_usage.py              # 演示脚本（支持多种模式）
-├── llm_with_mcp_tools.py      # LLM 与 MCP 工具集成核心（交互）
-├── mcp_tools_server.py        # MCP 服务器（多工具注册与分发）
-├── pyproject.toml             # 项目配置文件
-├── AFM_tool/                  # AFM 协议与数据
-│   └── 通讯协议V37.py        # AFM 协议寄存器字典
-│   ├── AFM助手提示词.md           # AFM 模式标准流程描述
-│   └── AFM扫描常见问题及解决.md    # AFM 故障检索知识库
-└── tools/                     # 工具模块目录
-    ├── __init__.py
-    ├── afm_tool.py           # AFM 辅助工具（寄存器/流程/检索）
-    ├── outfit_tool.py        # 穿衣建议生成工具（Markdown 输出）
-    ├── file_tool.py          # 文件保存工具（保存 Markdown 文档）
-    ├── filesystem_tool.py    # 文件系统操作工具（读写/目录/搜索/编辑）
-    ├── time_tool.py          # 时间获取工具
-    └── weather_tool.py       # 天气查询工具
-```
+### 🛠️ 工具集成
+- 📁 **文件系统**: 读写、搜索、编辑、移动文件
+- 🌤️ **天气查询**: 支持任意城市和日期
+- ⏰ **时间服务**: 多时区、多格式支持
+- 🧪 **AFM工具**: 问题查询、寄存器校验、协议检索、语义搜索
+
+
 
 ## 🚀 快速开始
 
 ### 1. 安装依赖
-
 ```bash
 pip install -e .
 ```
 
-### 2. 运行演示
+### 2. 快速体验（推荐）
+```bash
+# 5分钟了解所有功能
+python quick_start.py
+```
 
-#### 方式一：命令行参数
+### 3. 启动交互式对话
+```bash
+python llm_with_mcp_tools.py
+```
+
+**特殊命令**:
+- `clear` / `清除` - 清除当前会话记忆
+- `status` / `状态` - 查看记忆系统状态
+- `help` / `帮助` - 查看可用功能
+- `quit` / `退出` - 退出程序（自动保存会话）
+### 4. 运行基础工具演示
 ```bash
 # 天气工具演示
 python demo_usage.py weather
@@ -55,17 +51,27 @@ python demo_usage.py all
 
 # 交互式对话模式
 python demo_usage.py interactive
-
-# AFM 工具演示
-python demo_usage.py afm
 ```
 
-#### 方式二：交互式选择
-```bash
-python demo_usage.py
-```
+## 💡 使用示例
 
-## 🔧 工具说明
+### 多轮对话示例
+```
+用户: 你好，我叫小明，是AFM工程师
+助手: 你好小明！...
+💾 检测到重要信息，已保存到长期记忆（类型: fact）
+
+用户: 我喜欢简洁的回答
+助手: 明白了，我会保持简洁。
+💾 检测到重要信息，已保存到长期记忆（类型: preference）
+
+用户: 你还记得我叫什么吗？
+助手: 你叫小明！（从短期记忆读取）
+
+[新会话]
+用户: 我之前告诉过你我的职业吗？
+助手: 是的，你是AFM工程师。（从长期记忆读取）
+```
 
 ### 天气工具 (WeatherTool)
 - 支持城市天气查询
@@ -92,47 +98,35 @@ python demo_usage.py
 - 自动创建目录
 - 支持多种文件格式
 
-### AFM 工具 (AFMTool)
-- `afm_list_registers`: 按类型/名称/地址列出寄存器，支持 `limit`
-- `afm_get_register_info`: 查询单个寄存器详情，如 `REG0B`
-- `afm_validate_register_value`: 校验写入值是否符合范围/步长/类型
-- `afm_get_mode_standard_flow`: 返回模式标准流程（如“轻敲”“接触”“PFM”等）
-- `afm_search_troubleshooting`: 检索常见问题与解决建议（支持嵌入与重排）
-
-示例：
-```
-# 寄存器列表（开关类，限制返回5条）
-afm_list_registers(type="switch", limit=5)
-
-# 寄存器详情
-afm_get_register_info(reg="REG0B")
-
-# 写入校验
-afm_validate_register_value(reg="REG0B", value=0)
-
-# 模式流程
-afm_get_mode_standard_flow(mode="轻敲")
-
-# 故障检索（嵌入+重排）
-afm_search_troubleshooting(query="共振峰", category="曲线测试类", limit=5)
-```
-
-### SiliconFlow 嵌入与重排配置
-- AFM 故障检索可使用 SiliconFlow 的 `embedding` 与 `rerank` 优化复杂字符匹配
-- 参考 `/c:/Users/20599/Desktop/MCP_agent/siliconCloud.py`
-- 配置环境变量 `SILICONFLOW_API_KEY` 即可启用；未配置时回退为关键词检索
-
-在 Windows PowerShell 设置当前会话：
-```
-$env:SILICONFLOW_API_KEY = "你的API密钥"
-```
-
-或永久设置：
-```
-setx SILICONFLOW_API_KEY "你的API密钥"
-```
+### AFM 工具
+- `get_afm_prompt`: 返回 AFM助手提示词
+- `query_afm_issue`: 查询常见问题（支持分类/编号/关键词）
+- `validate_afm_registers`: 校验寄存器配置的类型、范围与步进
+- `search_protocol_register`: 检索协议中的寄存器信息
+- `search_afm_issue_semantic`: **语义检索**（支持embedding/rerank模型）
 
 ## 💡 使用示例
+
+### 🧠 上下文工程示例
+
+```
+用户: 你好，我叫小明，我是AFM工程师
+助手: 你好小明！很高兴认识你...
+💾 检测到重要信息，已保存到长期记忆（类型: fact）
+
+用户: 我喜欢简洁的回答，不要太啰嗦
+助手: 明白了，我会保持简洁。
+💾 检测到重要信息，已保存到长期记忆（类型: preference）
+
+用户: 你还记得我叫什么名字吗？
+助手: 当然记得，你叫小明！
+
+[新会话开始]
+用户: 我之前告诉过你我的职业吗？
+助手: 是的，你是AFM工程师。（从长期记忆中读取）
+```
+
+### 基础功能示例
 
 ### 天气查询
 ```
@@ -154,28 +148,100 @@ setx SILICONFLOW_API_KEY "你的API密钥"
 
 ## 🛠️ 技术架构
 
+### 核心架构
 - **MCP协议**: 使用标准MCP协议进行工具通信
 - **异步处理**: 基于asyncio的高性能异步架构
 - **模块化设计**: 每个工具独立模块，易于扩展
 - **错误处理**: 完善的异常处理和错误提示
 - **类型安全**: 使用类型注解确保代码质量
 
+### 🧠 上下文工程架构
+
+```
+用户输入 → Context Engineer → LLM + Tools → 响应 + 记忆更新
+           ↓                                      ↓
+    [短期记忆 + 长期记忆 + 知识库]  ←───────────────┘
+```
+
+**关键组件**:
+1. **MemoryManager**: 管理长期记忆（用户画像、会话历史、知识库）
+2. **ShortTermMemory**: 管理对话历史和上下文窗口
+3. **ContextEngineer**: 动态构建提示、判断记忆保存
+
+**详细架构**: 请查看 [CONTEXT_ENGINEERING_DESIGN.md](CONTEXT_ENGINEERING_DESIGN.md)
+
 ## 📝 开发说明
+
+### 使用上下文工程
+
+#### 启用上下文工程（默认）
+```python
+from llm_with_mcp_tools import LLMWithMCPTools
+
+llm_system = LLMWithMCPTools(
+    enable_context_engineering=True,  # 启用上下文工程
+    memory_dir="memory"               # 记忆存储目录
+)
+```
+
+#### 禁用上下文工程（传统模式）
+```python
+llm_system = LLMWithMCPTools(enable_context_engineering=False)
+```
+
+#### 查看记忆状态
+```python
+status = llm_system.get_memory_status()
+print(json.dumps(status, ensure_ascii=False, indent=2))
+```
+
+#### 手动清除会话
+```python
+llm_system.clear_session(save_summary=True)  # 清除并保存摘要
+```
 
 ### 添加新工具
 1. 在 `tools/` 目录下创建新的工具模块
-2. 实现工具类，包含 `get_tool_definition()` 方法（返回 MCP `Tool` 或函数式工具定义集合）
-3. 在 `mcp_tools_server.py` 中注册工具：
-   - 在 `@server.list_tools()` 中加入工具定义（必要时展开函数式列表）
-   - 在 `@server.call_tool()` 中分发具体工具处理方法
-4. 在 `llm_with_mcp_tools.py` 的 `get_tools_definition()` 中汇总工具定义供 LLM 使用
+2. 实现工具类，包含 `get_tool_definition()` 方法
+3. 在 `mcp_server.py` 中注册新工具（list_tools 和 call_tool 路由）
+4. 在 `llm_with_mcp_tools.py` 中添加工具定义（用于 LLM tool calls）
 
-### 配置说明
-- API 配置在 `llm_with_mcp_tools.py` 中（SiliconFlow Chat Completions）
-- 工具注册在 `mcp_tools_server.py` 中；工具定义由各自模块提供
-- 客户端会统一从工具模块生成 LLM `tools` 参数
+### 🎯 性能与限制
+
+### 上下文工程性能
+- **内存占用**: < 5MB（轻量级）
+- **记忆加载**: < 10ms
+- **上下文构建**: < 50ms
+- **支持会话数**: < 50次历史会话
+- **知识库条目**: < 1000条（超过建议使用向量数据库）
+
+### 配置参数
+
+在 `context_manager.py` 中可调整:
+```python
+ShortTermMemory(
+    max_messages=20,    # 最大消息数
+    max_tokens=4000     # 最大token估算值
+)
+```
+
+## 🔮 未来规划
+
+- [ ] 集成向量数据库（ChromaDB/FAISS）用于语义检索
+- [ ] 实现完整的RAG（检索增强生成）流程
+- [ ] 添加记忆图谱（Memory Graph）
+- [ ] 支持多模态记忆（图片、文件）
+- [ ] 多用户隔离和权限管理
+- [ ] 对话主题自动提取和分类
+
+## 📚 文档
+
+- [上下文工程架构设计文档](CONTEXT_ENGINEERING_DESIGN.md) - 详细的架构说明和技术决策
+
+## 配置说明
+- API配置在 `llm_with_mcp_tools.py` 中
+- 工具配置在各自的工具模块中
 - 项目依赖在 `pyproject.toml` 中管理
-- AFM 相关数据来源：`AFM_tool/通讯协议V37.py`、`AFM助手提示词.md`、`AFM扫描常见问题及解决.md`
 
 ## 📄 许可证
 

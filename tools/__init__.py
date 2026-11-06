@@ -6,5 +6,8 @@ MCP工具包
 from .weather_tool import WeatherTool
 from .file_tool import FileTool
 from .time_tool import TimeTool
+from .afm_tool import AFMTool
+from .afm_semantic_tool import AFMSemanticTool
+from .outfit_tool import OutfitTool
 
-__all__ = ['WeatherTool', 'FileTool', 'TimeTool']
+__all__ = ['WeatherTool', 'FileTool', 'TimeTool', 'AFMTool', 'AFMSemanticTool', 'OutfitTool']

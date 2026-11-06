@@ -10,36 +10,20 @@ from llm_with_mcp_tools import LLMWithMCPTools
 async def demo_weather_queries():
     """演示天气查询功能"""
     llm_system = LLMWithMCPTools()
-    
     try:
-        print("🌤️ LLM + MCP 天气查询系统演示")
-        print("=" * 50)
-        
-        # 初始化系统
+        print("🌤️ LLM + MCP 天气查询系统演示\n" + "="*50)
         print("🚀 正在启动系统...")
         await llm_system.initialize_mcp()
         print("✅ 系统启动完成!\n")
         
-        # 演示查询列表
-        demo_queries = [
-            "你好，我想知道北京明天的天气怎么样？",
-            "请帮我查询2024年3月15日上海的天气情况",
-            "深圳今天（2024年1月10日）适合户外运动吗？"
-        ]
-        
-        # 执行演示查询
-        for i, query in enumerate(demo_queries, 1):
-            print(f"\n📝 查询 {i}: {query}")
-            print("-" * 40)
-            
+        for i, query in enumerate(["你好，我想知道北京明天的天气怎么样？", 
+                                    "请帮我查询2024年3月15日上海的天气情况",
+                                    "深圳今天（2024年1月10日）适合户外运动吗？"], 1):
+            print(f"\n📝 查询 {i}: {query}\n" + "-"*40)
             try:
-                response = await llm_system.chat_with_tools(query)
-                print(f"🤖 回答: {response}")
+                print(f"🤖 回答: {await llm_system.chat_with_tools(query)}\n")
             except Exception as e:
-                print(f"❌ 查询失败: {e}")
-            
-            print()
-        
+                print(f"❌ 查询失败: {e}\n")
     except Exception as e:
         print(f"❌ 演示失败: {e}")
     finally:
@@ -74,6 +58,8 @@ async def interactive_mode():
                     print("  - 天气查询: 询问任何城市的天气情况")
                     print("  - 文件操作: 读写文件、创建目录等")
                     print("  - 时间查询: 获取当前时间")
+                    print("  - 穿衣建议: 输入时间/地点/天气/温度生成markdown方案，可保存为md")
+                    print("  - AFM工具: 语义检索常见问题、协议寄存器搜索、寄存器配置校验")
                     print("  - 一般对话: 任何其他问题")
                     continue
                 
@@ -98,76 +84,23 @@ async def interactive_mode():
 async def demo_all_tools():
     """演示所有工具的综合功能"""
     llm_system = LLMWithMCPTools()
-    
     try:
-        print("🛠️ LLM + MCP 全工具演示")
-        print("=" * 50)
-        
-        # 初始化系统
+        print("🛠️ LLM + MCP 全工具演示\n" + "="*50)
         print("🚀 正在启动系统...")
         await llm_system.initialize_mcp()
         print("✅ 系统启动完成!\n")
         
-        # 综合演示查询
-        demo_queries = [
-            "现在几点了？",
-            "帮我创建一个名为test.txt的文件，内容是'Hello World'",
-            "北京今天天气怎么样？",
-            "读取刚才创建的test.txt文件内容"
-        ]
-        
-        for i, query in enumerate(demo_queries, 1):
-            print(f"\n📝 演示 {i}: {query}")
-            print("-" * 40)
-            
+        for i, query in enumerate(["现在几点了？", 
+                                    "帮我创建一个名为test.txt的文件，内容是'Hello World'",
+                                    "北京今天天气怎么样？", "读取刚才创建的test.txt文件内容",
+                                    "根据今天上海小雨、12℃-16℃生成通勤穿衣建议，并保存为md",
+                                    "AFM扫描出现'Z轴无法回零'怎么处理？",
+                                    "若调整PFM积分增益，我应该调整哪个寄存器？"], 1):
+            print(f"\n📝 演示 {i}: {query}\n" + "-"*40)
             try:
-                response = await llm_system.chat_with_tools(query)
-                print(f"🤖 回答: {response}")
+                print(f"🤖 回答: {await llm_system.chat_with_tools(query)}")
             except Exception as e:
                 print(f"❌ 执行失败: {e}")
-        
-    except Exception as e:
-        print(f"❌ 演示失败: {e}")
-    finally:
-        await llm_system.cleanup_mcp()
-
-async def demo_afm_tools():
-    """演示 AFM 工具：寄存器、标准流程、故障检索（含嵌入与重排）"""
-    llm_system = LLMWithMCPTools()
-    try:
-        print("🧪 LLM + MCP AFM 工具演示")
-        print("=" * 50)
-
-        # 初始化系统
-        print("🚀 正在启动系统...")
-        await llm_system.initialize_mcp()
-        print("✅ 系统启动完成!\n")
-
-        # 1) 列出部分寄存器
-        print("📚 列出部分寄存器 (type=switch, limit=5)")
-        res = await llm_system.call_mcp_tool("afm_list_registers", {"type": "switch", "limit": 5})
-        print(res)
-
-        # 2) 寄存器详情
-        print("\n🔎 查询寄存器详情 REG0B")
-        res = await llm_system.call_mcp_tool("afm_get_register_info", {"reg": "REG0B"})
-        print(res)
-
-        # 3) 校验写入值
-        print("\n✅ 校验写入值 REG0B=0")
-        res = await llm_system.call_mcp_tool("afm_validate_register_value", {"reg": "REG0B", "value": 0})
-        print(res)
-
-        # 4) 获取标准流程（轻敲）
-        print("\n📋 获取模式标准流程：轻敲")
-        res = await llm_system.call_mcp_tool("afm_get_mode_standard_flow", {"mode": "轻敲"})
-        print(res)
-
-        # 5) 故障检索（嵌入 + 重排），需设置环境变量 SILICONFLOW_API_KEY
-        print("\n🧠 故障检索：关键词=‘共振峰’，分类=曲线测试类")
-        res = await llm_system.call_mcp_tool("afm_search_troubleshooting", {"query": "共振峰", "category": "曲线测试类", "limit": 5})
-        print(res)
-
     except Exception as e:
         print(f"❌ 演示失败: {e}")
     finally:
@@ -185,10 +118,8 @@ async def main():
             await demo_all_tools()
         elif mode == 'interactive':
             await interactive_mode()
-        elif mode == 'afm':
-            await demo_afm_tools()
         else:
-            print("❌ 未知模式，支持的模式: weather, all, interactive, afm")
+            print("❌ 未知模式，支持的模式: weather, all, interactive")
     else:
         # 交互式选择模式
         print("🚀 LLM + MCP 工具演示系统")
@@ -197,11 +128,10 @@ async def main():
         print("1. 天气工具演示 (weather)")
         print("2. 全工具综合演示 (all)")
         print("3. 交互式对话模式 (interactive)")
-        print("4. AFM 工具演示 (afm)")
         print()
         
         while True:
-            choice = input("请输入选择 (1-4): ").strip()
+            choice = input("请输入选择 (1-3): ").strip()
             
             if choice == '1':
                 await demo_weather_queries()
@@ -212,11 +142,8 @@ async def main():
             elif choice == '3':
                 await interactive_mode()
                 break
-            elif choice == '4':
-                await demo_afm_tools()
-                break
             else:
-                print("❌ 无效选择，请输入 1-4")
+                print("❌ 无效选择，请输入 1-3")
 
 if __name__ == "__main__":
     asyncio.run(main())

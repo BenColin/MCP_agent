@@ -34,6 +34,31 @@ class TimeTool:
                 "required": []
             }
         )
+
+    @staticmethod
+    def get_llm_tool_definition() -> dict:
+        """以LLM工具规范导出定义，用于 tools 参数"""
+        return {
+            "type": "function",
+            "function": {
+                "name": "get_current_time",
+                "description": "获取当前系统时间信息",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "timezone": {
+                            "type": "string",
+                            "description": "时区，可选，默认为系统本地时区"
+                        },
+                        "format": {
+                            "type": "string",
+                            "description": "时间格式，可选，默认为'%Y-%m-%d %H:%M:%S'"
+                        }
+                    },
+                    "required": []
+                }
+            }
+        }
     
     @staticmethod
     def handle_get_current_time(arguments: Dict[str, Any]) -> list[TextContent]:

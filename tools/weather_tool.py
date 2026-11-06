@@ -28,6 +28,27 @@ class WeatherTool:
                 "required": ["city"]
             }
         )
+
+    @staticmethod
+    def get_llm_tool_definition() -> dict:
+        """以LLM工具规范导出定义，用于 tools 参数"""
+        return {
+            "type": "function",
+            "function": {
+                "name": "get_weather",
+                "description": "获取指定城市的当前天气信息",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "city": {
+                            "type": "string",
+                            "description": "城市名称，例如：北京、上海、广州等"
+                        }
+                    },
+                    "required": ["city"]
+                }
+            }
+        }
     
     @staticmethod
     def handle_get_weather(arguments: Dict[str, Any]) -> list[TextContent]:
